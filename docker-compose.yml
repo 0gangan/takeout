@@ -1,0 +1,31 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: takeout-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: shuai2022594618   # root 密码
+      MYSQL_DATABASE: takeout_db           # 初始化数据库
+    ports:
+      - "33060:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./takeout_db_backup.sql:/docker-entrypoint-initdb.d/takeout_db_backup.sql
+
+  backend:
+    build: .
+    container_name: takeout-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_URL=jdbc:mysql://mysql:3306/takeout_db?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=shuai202259418
+    depends_on:
+      - mysql
+
+
+volumes:
+  mysql-data:
