@@ -3,8 +3,8 @@ package com.lzg.takeout.controller;
 import com.lzg.takeout.dto.OrderDTO;
 import com.lzg.takeout.dto.OrderRequest;
 import com.lzg.takeout.service.OrderFacadeService;
+import com.lzg.takeout.util.R;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,33 +18,33 @@ public class OrderController {
 
     // 买家根据用户ID获取订单列表
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(orderFacadeService.getOrdersByUserId(userId));
+    public R<List<OrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
+        return R.ok(orderFacadeService.getOrdersByUserId(userId));
     }
 
     // 商家根据商家ID获取订单列表
     @GetMapping("/merchant/{merchantId}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByMerchantId(@PathVariable Long merchantId) {
-        return ResponseEntity.ok(orderFacadeService.getOrdersByMerchantId(merchantId));
+    public R<List<OrderDTO>> getOrdersByMerchantId(@PathVariable Long merchantId) {
+        return R.ok(orderFacadeService.getOrdersByMerchantId(merchantId));
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDTO> getOrderDetailById(@PathVariable Long orderId) {
+    public R<OrderDTO> getOrderDetailById(@PathVariable Long orderId) {
         return orderFacadeService.getOrderById(orderId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(R::ok)
+                .orElse(R.fail(404, "订单未找到"));
     }
 
     // 获取今日订单数
     @GetMapping("/merchant/{merchantId}/today-count")
-    public ResponseEntity<Long> countTodayOrders(@PathVariable Long merchantId) {
-        return ResponseEntity.ok(orderFacadeService.countTodayOrders(merchantId));
+    public R<Long> countTodayOrders(@PathVariable Long merchantId) {
+        return R.ok(orderFacadeService.countTodayOrders(merchantId));
     }
 
     // 提交订单
     @PostMapping
-    public ResponseEntity<String> submitOrder(@RequestBody OrderRequest orderRequest) {
+    public R<String> submitOrder(@RequestBody OrderRequest orderRequest) {
         orderFacadeService.submitOrder(orderRequest);
-        return ResponseEntity.ok("订单提交成功！");
+        return R.ok("订单提交成功！");
     }
 }

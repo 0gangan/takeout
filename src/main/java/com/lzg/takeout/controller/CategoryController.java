@@ -2,8 +2,8 @@ package com.lzg.takeout.controller;
 
 import com.lzg.takeout.entity.Category;
 import com.lzg.takeout.service.CategoryService;
+import com.lzg.takeout.util.R;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +17,13 @@ public class CategoryController {
 
     // 添加分类
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.createCategory(category));
+    public R<Category> createCategory(@RequestBody Category category) {
+        return R.ok(categoryService.createCategory(category));
     }
 
     // 获取商家的所有分类（可选功能）
     @GetMapping("/merchant/{merchantId}")
-    public ResponseEntity<List<Category>> getCategoriesByMerchant(@PathVariable Long merchantId) {
-        return ResponseEntity.ok(categoryService.findByMerchantId(merchantId));
+    public R<List<Category>> getCategoriesByMerchant(@PathVariable Long merchantId) {
+        return R.ok(categoryService.findByMerchantId(merchantId));
     }
 }

@@ -3,8 +3,8 @@ package com.lzg.takeout.controller;
 import com.lzg.takeout.entity.Merchant;
 import com.lzg.takeout.entity.User;
 import com.lzg.takeout.service.UserCrudService;
+import com.lzg.takeout.util.R;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,50 +18,44 @@ public class UserController {
 
     // 获取所有用户
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+    public R<List<User>> getAllUsers() {
+        return R.ok(userService.findAll());
     }
 
     // 根据 ID 获取用户
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.findById(id).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public R<User> getUserById(@PathVariable Long id) {
+        return userService.findById(id).map(R::ok).orElse(R.fail(404, "用户未找到"));
     }
 
     // 创建用户（用于注册）
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.create(user));
+    public R<User> createUser(@RequestBody User user) {
+        return R.ok(userService.create(user));
     }
 
     // 更新用户信息（包括地址）
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        return userService.update(id, updatedUser)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public R<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        return userService.update(id, updatedUser).map(R::ok).orElse(R.fail(404, "用户未找到"));
     }
 
     // 删除用户
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public R<Void> deleteUser(@PathVariable Long id) {
         if (!userService.deleteById(id)) {
-            return ResponseEntity.notFound().build();
+            return R.fail(404, "用户未找到");
         }
-        return ResponseEntity.noContent().build();
+        return R.ok();
     }
 
     // 检查用户名是否已存在
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> checkUserExists(@RequestParam String username) {
-        boolean exists = userService.existsByUsername(username);
-        return ResponseEntity.ok(exists);
+    public R<Boolean> checkUserExists(@RequestParam String username) {
+        return R.ok(userService.existsByUsername(username));
     }
     @GetMapping("/{userId}/merchant")
-    public ResponseEntity<Merchant> getMerchantByUserId(@PathVariable Long userId) {
-        return userService.findMerchantByUserId(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public R<Merchant> getMerchantByUserId(@PathVariable Long userId) {
+        return userService.findMerchantByUserId(userId).map(R::ok).orElse(R.fail(404, "商家未找到"));
     }
 }
