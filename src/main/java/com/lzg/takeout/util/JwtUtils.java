@@ -5,7 +5,10 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -18,9 +21,10 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("roles", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -34,6 +38,17 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public List<String> getRoles(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+        Object rolesObj = claims.get("roles");
+        if (rolesObj == null) return List.of();
+        String rolesStr = String.valueOf(rolesObj);
+        if (rolesStr.isEmpty()) return List.of();
+        return Arrays.stream(rolesStr.split(","))
+                .map(String::trim)
+                .collect(Collectors.toList());
     }
 
     public boolean isTokenValid(String token) {
