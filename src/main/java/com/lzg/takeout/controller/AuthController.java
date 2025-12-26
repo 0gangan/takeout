@@ -8,15 +8,18 @@ import com.lzg.takeout.service.LoginService;
 import com.lzg.takeout.service.RegisterService;
 import com.lzg.takeout.util.R;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -28,6 +31,7 @@ public class AuthController {
     @Autowired
     private RegisterService registerService;
 
+    Logger logger = Logger.getLogger(AuthController.class.getName());
     /** 登录接口：返回 token + 用户信息（R<LoginResponse>），前端据此跳转 */
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -53,6 +57,8 @@ public class AuthController {
                 user.getPhone(),
                 user.getAddress()
         );
+
+        logger.info("用户 " + username + " 登录成功，生成令牌：" + token);
         return R.ok(resp);
     }
 

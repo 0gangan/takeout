@@ -36,10 +36,20 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Override
     public Optional<User> update(Long id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
-            user.setUsername(updatedUser.getUsername());
-            user.setEmail(updatedUser.getEmail());
-            user.setPhone(updatedUser.getPhone());
-            user.setAddress(updatedUser.getAddress());
+            // Only update fields that are provided (non-null/non-empty)
+            if (updatedUser.getUsername() != null && !updatedUser.getUsername().isBlank()) {
+                user.setUsername(updatedUser.getUsername());
+            }
+            if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
+                user.setEmail(updatedUser.getEmail());
+            }
+            if (updatedUser.getPhone() != null && !updatedUser.getPhone().isBlank()) {
+                user.setPhone(updatedUser.getPhone());
+            }
+            if (updatedUser.getAddress() != null && !updatedUser.getAddress().isBlank()) {
+                user.setAddress(updatedUser.getAddress());
+            }
+            // Note: password and role should be changed via dedicated endpoints with proper checks
             return userRepository.save(user);
         });
     }
@@ -61,4 +71,3 @@ public class UserCrudServiceImpl implements UserCrudService {
         return merchantRepository.findByUserId(userId);
     }
 }
-
