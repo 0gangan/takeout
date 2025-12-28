@@ -72,6 +72,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-012
      * 用例名称: OrderService.getOrdersByUserId-正常情况
      */
@@ -89,6 +91,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     ** 作者：刘忠彬
      * 用例编号: ORD-013
      * 用例名称: OrderService.getOrdersByUserId-用户无订单
      */
@@ -104,6 +108,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-014
      * 用例名称: OrderService.getOrdersByMerchantId-正常情况
      */
@@ -121,6 +127,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-015
      * 用例名称: OrderService.getOrdersByMerchantId-商家无订单
      */
@@ -136,6 +144,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-016
      * 用例名称: OrderService.getOrderById-正常情况
      */
@@ -151,6 +161,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-017
      * 用例名称: OrderService.getOrderById-订单不存在
      */
@@ -165,6 +177,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-018
      * 用例名称: OrderService.countTodayOrders-正常情况
      */
@@ -180,6 +194,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-019
      * 用例名称: OrderService.countTodayOrders-无今日订单
      */
@@ -195,6 +211,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-020
      * 用例名称: OrderService.saveOrder-正常保存
      */
@@ -218,6 +236,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-021
      * 用例名称: OrderService.saveOrder-用户不存在
      */
@@ -237,6 +257,8 @@ class OrderServiceimplTest {
     }
 
     /**
+     * 时间：2025/12/28
+     * 作者：刘忠彬
      * 用例编号: ORD-022
      * 用例名称: OrderService.saveOrder-商家不存在
      */
