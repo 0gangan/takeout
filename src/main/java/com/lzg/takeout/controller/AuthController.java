@@ -2,6 +2,7 @@ package com.lzg.takeout.controller;
 
 import com.lzg.takeout.dto.LoginRequest;
 import com.lzg.takeout.dto.LoginResponse;
+import com.lzg.takeout.dto.RegisterRequest;
 import com.lzg.takeout.entity.User;
 import com.lzg.takeout.repository.UserRepository;
 import com.lzg.takeout.service.LoginService;
@@ -79,9 +80,9 @@ public class AuthController {
 
     /** 简易注册接口：保存用户并返回 JWT （返回 R<LoginResponse>）*/
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<LoginResponse> register(@RequestBody LoginRequest request) {
+    public R<LoginResponse> register(@RequestBody RegisterRequest request) {
         try {
-            String token = registerService.register(request.getUsername(), request.getPassword());
+            String token = registerService.register(request.getUsername(), request.getPassword(),request.getRole());
 
             Optional<User> optionalUser = userRepo.findByUsername(request.getUsername());
             if (optionalUser.isEmpty()) {

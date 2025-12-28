@@ -69,7 +69,8 @@ class RegisterServiceImplTest {
             return u;
         });
 
-        String result = registerService.register(username, raw);
+        // pass null role to preserve previous default behavior
+        String result = registerService.register(username, raw, null);
 
         assertEquals(token, result);
         verify(userRepository, times(1)).save(any(User.class));
@@ -88,6 +89,6 @@ class RegisterServiceImplTest {
                 .thenReturn(Optional.of(new User()));
 
         assertThrows(RuntimeException.class,
-                () -> registerService.register("exists", "p"));
+                () -> registerService.register("exists", "p", null));
     }
 }

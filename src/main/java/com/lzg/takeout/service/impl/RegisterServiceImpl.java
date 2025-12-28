@@ -17,7 +17,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final LoginService loginService;
 
     @Override
-    public String register(String username, String password) {
+    public String register(String username, String password, String role) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("用户名已存在");
         }
@@ -25,7 +25,13 @@ public class RegisterServiceImpl implements RegisterService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setRole("BUYER");
+
+        // Normalize and validate role: default to BUYER
+        String normalizedRole = (role == null || role.isBlank()) ? "BUYER" : role.trim().toUpperCase();
+        if (!"BUYER".equals(normalizedRole) && !"MERCHANT".equals(normalizedRole)) {
+            throw new RuntimeException("不支持的角色：" + role);
+        }
+        user.setRole(normalizedRole);
         user.setEmail("");
         user.setPhone("");
 
