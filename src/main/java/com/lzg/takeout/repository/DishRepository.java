@@ -8,4 +8,5 @@ import java.util.List;
 public interface DishRepository extends JpaRepository<Dish, Long> {
     List<Dish> findByMerchantId(Long merchantId);
     List<Dish> findByCategoryId(Long categoryId);
+    void deleteByMerchantId(Long merchantId);
 }

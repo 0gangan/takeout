@@ -16,4 +16,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     // 根据商家ID和用户ID查询订单详情
     List<OrderDetail> findByOrder_Merchant_IdAndOrder_User_Id(Long merchantId, Long userId);
+
+    void deleteByOrderId(Long orderId);
+
+    void deleteByOrder_MerchantId(Long merchantId);
 }

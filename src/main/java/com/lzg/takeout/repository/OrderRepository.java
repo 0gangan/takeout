@@ -10,4 +10,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUserId(Long userId);
     List<Order> findByMerchantId(Long merchantId);
     long countByMerchantIdAndOrderTimeBetween(Long merchantId, LocalDateTime start, LocalDateTime end);
+    void deleteByMerchantId(Long merchantId);
 }
