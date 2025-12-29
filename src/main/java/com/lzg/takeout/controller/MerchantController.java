@@ -4,6 +4,7 @@ import com.lzg.takeout.dto.MerchantDTO;
 import com.lzg.takeout.entity.Dish;
 import com.lzg.takeout.service.MerchantService;
 import com.lzg.takeout.util.R;
+import com.lzg.takeout.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,9 @@ public class MerchantController {
 
     @PutMapping("/{id}")
     public R<MerchantDTO> updateMerchant(@PathVariable Long id, @RequestBody MerchantDTO merchantDTO) {
+        if (!SecurityUtils.isCurrentUserMerchant()) {
+            return R.fail(403, "无权限修改此商家的信息");
+        }
         return merchantService.updateMerchant(id, merchantDTO)
                 .map(R::ok)
                 .orElse(R.fail(404, "商家未找到"));

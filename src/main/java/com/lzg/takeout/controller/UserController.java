@@ -4,6 +4,7 @@ import com.lzg.takeout.entity.Merchant;
 import com.lzg.takeout.entity.User;
 import com.lzg.takeout.service.UserCrudService;
 import com.lzg.takeout.util.R;
+import com.lzg.takeout.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,12 +38,18 @@ public class UserController {
     // 更新用户信息（包括地址）
     @PutMapping("/{id}")
     public R<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        if (!SecurityUtils.isCurrentUserOrAdmin(id)) {
+            return R.fail(403, "无权限修改此用户的信息");
+        }
         return userService.update(id, updatedUser).map(R::ok).orElse(R.fail(404, "用户未找到"));
     }
 
     // 删除用户
     @DeleteMapping("/{id}")
     public R<Void> deleteUser(@PathVariable Long id) {
+        if (!SecurityUtils.isCurrentUserOrAdmin(id)) {
+            return R.fail(403, "无权限删除此用户的信息");
+        }
         if (!userService.deleteById(id)) {
             return R.fail(404, "用户未找到");
         }

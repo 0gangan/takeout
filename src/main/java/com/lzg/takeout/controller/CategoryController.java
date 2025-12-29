@@ -3,6 +3,7 @@ package com.lzg.takeout.controller;
 import com.lzg.takeout.entity.Category;
 import com.lzg.takeout.service.CategoryService;
 import com.lzg.takeout.util.R;
+import com.lzg.takeout.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,9 @@ public class CategoryController {
     // 添加分类
     @PostMapping
     public R<Category> createCategory(@RequestBody Category category) {
+        if (!SecurityUtils.isCurrentUserMerchant()) {
+            return R.fail(403, "无权限添加分类");
+        }
         return R.ok(categoryService.createCategory(category));
     }
 

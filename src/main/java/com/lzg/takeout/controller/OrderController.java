@@ -4,6 +4,7 @@ import com.lzg.takeout.dto.OrderDTO;
 import com.lzg.takeout.dto.OrderRequest;
 import com.lzg.takeout.service.OrderFacadeService;
 import com.lzg.takeout.util.R;
+import com.lzg.takeout.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,18 @@ public class OrderController {
     // 买家根据用户ID获取订单列表
     @GetMapping("/user/{userId}")
     public R<List<OrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
+        if (!SecurityUtils.isCurrentUserOrAdmin(userId)) {
+            return R.fail(403, "无权限查看此用户的订单");
+        }
         return R.ok(orderFacadeService.getOrdersByUserId(userId));
     }
 
     // 商家根据商家ID获取订单列表
     @GetMapping("/merchant/{merchantId}")
     public R<List<OrderDTO>> getOrdersByMerchantId(@PathVariable Long merchantId) {
+        if (!SecurityUtils.isCurrentUserMerchant()) {
+            return R.fail(403, "无权限查看此商家的订单");
+        }
         return R.ok(orderFacadeService.getOrdersByMerchantId(merchantId));
     }
 
