@@ -1,10 +1,12 @@
 package com.lzg.takeout.controller;
 
 import com.lzg.takeout.dto.MerchantDTO;
+import com.lzg.takeout.dto.MerchantListDTO;
 import com.lzg.takeout.entity.Dish;
 import com.lzg.takeout.service.MerchantService;
 import com.lzg.takeout.util.R;
 import com.lzg.takeout.util.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +22,13 @@ public class MerchantController {
 
     // 添加商家
     @PostMapping
-    public R<MerchantDTO> createMerchant(@RequestBody MerchantDTO merchantDTO) {
+    public R<MerchantDTO> createMerchant(@Valid @RequestBody MerchantDTO merchantDTO) {
         return R.ok(merchantService.createMerchant(merchantDTO));
     }
 
     // 获取所有商家
     @GetMapping
-    public R<List<MerchantDTO>> getAllMerchants() {
+    public R<List<MerchantListDTO>> getAllMerchants() {
         return R.ok(merchantService.findAll());
     }
 
@@ -58,6 +60,16 @@ public class MerchantController {
         return merchantService.updateMerchant(id, merchantDTO)
                 .map(R::ok)
                 .orElse(R.fail(404, "商家未找到"));
+    }
+
+    @DeleteMapping("/{id}")
+    public R<Void> deleteMerchant(@PathVariable Long id) {
+        boolean deleted = merchantService.deleteMerchant(id);
+        if (deleted) {
+            return R.ok(null);
+        } else {
+            return R.fail(404, "商家不存在");
+        }
     }
 
 }

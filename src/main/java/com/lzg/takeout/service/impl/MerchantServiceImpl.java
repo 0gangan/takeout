@@ -1,11 +1,13 @@
 package com.lzg.takeout.service.impl;
 
 import com.lzg.takeout.dto.MerchantDTO;
+import com.lzg.takeout.dto.MerchantListDTO;
 import com.lzg.takeout.entity.Dish;
 import com.lzg.takeout.entity.Merchant;
 import com.lzg.takeout.entity.User;
 import com.lzg.takeout.repository.DishRepository;
 import com.lzg.takeout.repository.MerchantRepository;
+import com.lzg.takeout.repository.OrderDetailRepository;
 import com.lzg.takeout.repository.OrderRepository;
 import com.lzg.takeout.service.MerchantService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     private final MerchantRepository merchantRepository;
     private final DishRepository dishRepository;
+    private final OrderDetailRepository orderDetailRepository;
     private final OrderRepository orderRepository;
 
     @Override
@@ -32,8 +35,8 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public List<MerchantDTO> findAll() {
-        return merchantRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    public List<MerchantListDTO> findAll() {
+        return merchantRepository.findAll().stream().map(this::toListDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -71,12 +74,27 @@ public class MerchantServiceImpl implements MerchantService {
         });
     }
 
+    @Override
+    public boolean deleteMerchant(Long id) {
+        Optional<Merchant> merchantOpt = merchantRepository.findById(id);
+        if (merchantOpt.isEmpty()) {
+            return false;
+        }
+        Merchant merchant = merchantOpt.get();
+        orderDetailRepository.deleteByOrder_MerchantId(id);
+        dishRepository.deleteByMerchantId(id);
+        orderRepository.deleteByMerchantId(id);
+        merchantRepository.delete(merchant);
+        return true;
+    }
+
     private Merchant toEntity(MerchantDTO dto) {
         Merchant merchant = new Merchant();
-        merchant.setId(dto.getId());
         merchant.setName(dto.getName());
         merchant.setAddress(dto.getAddress());
         merchant.setPhone(dto.getPhone());
+        merchant.setDescription(dto.getDescription());
+        merchant.setUser(dto.getUser());
         return merchant;
     }
 
@@ -86,7 +104,21 @@ public class MerchantServiceImpl implements MerchantService {
         dto.setName(merchant.getName());
         dto.setAddress(merchant.getAddress());
         dto.setPhone(merchant.getPhone());
+        dto.setDescription(merchant.getDescription());
+        dto.setUser(merchant.getUser());
+        return dto;
+    }
+
+    private MerchantListDTO toListDTO(Merchant merchant) {
+        MerchantListDTO dto = new MerchantListDTO();
+        dto.setId(merchant.getId());
+        dto.setName(merchant.getName());
+        dto.setAddress(merchant.getAddress());
+        dto.setPhone(merchant.getPhone());
+        dto.setDescription(merchant.getDescription());
+        if (merchant.getUser() != null) {
+            dto.setUserId(merchant.getUser().getId());
+        }
         return dto;
     }
 }
-

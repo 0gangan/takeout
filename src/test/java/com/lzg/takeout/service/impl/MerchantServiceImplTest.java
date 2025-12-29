@@ -8,6 +8,7 @@
 package com.lzg.takeout.service.impl;
 
 import com.lzg.takeout.dto.MerchantDTO;
+import com.lzg.takeout.dto.MerchantListDTO;
 import com.lzg.takeout.entity.Dish;
 import com.lzg.takeout.entity.User;
 import com.lzg.takeout.entity.Merchant;
@@ -44,7 +45,6 @@ class MerchantServiceImplTest {
 
     @Mock
     private DishRepository dishRepository;
-
 
     // 测试 createMerchant 方法
     @Test
@@ -92,7 +92,7 @@ class MerchantServiceImplTest {
         when(merchantRepository.findAll()).thenReturn(Arrays.asList(merchant1, merchant2));
 
         // When
-        List<MerchantDTO> result = merchantService.findAll();
+        List<MerchantListDTO> result = merchantService.findAll();
 
         // Then
         assertEquals(2, result.size());
