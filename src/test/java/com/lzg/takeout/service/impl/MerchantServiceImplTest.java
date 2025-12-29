@@ -1,5 +1,5 @@
 /**
- * 作者: zyr
+ * 作者: zgl
  * 日期: 12.28
  *
  * MerchantServiceImpl的单元测试类
@@ -9,8 +9,8 @@ package com.lzg.takeout.service.impl;
 
 import com.lzg.takeout.dto.MerchantDTO;
 import com.lzg.takeout.entity.Dish;
-import com.lzg.takeout.entity.Merchant;
 import com.lzg.takeout.entity.User;
+import com.lzg.takeout.entity.Merchant;
 import com.lzg.takeout.repository.DishRepository;
 import com.lzg.takeout.repository.MerchantRepository;
 import com.lzg.takeout.repository.OrderRepository;
@@ -33,6 +33,11 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MerchantServiceImplTest {
+    @Mock
+    private OrderRepository orderRepository;
+
+    @InjectMocks
+    private MerchantServiceImpl merchantService;
 
     @Mock
     private MerchantRepository merchantRepository;
@@ -40,11 +45,6 @@ class MerchantServiceImplTest {
     @Mock
     private DishRepository dishRepository;
 
-    @Mock
-    private OrderRepository orderRepository;
-
-    @InjectMocks
-    private MerchantServiceImpl merchantService;
 
     // 测试 createMerchant 方法
     @Test
