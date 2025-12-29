@@ -82,7 +82,7 @@ public class AuthController {
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<LoginResponse> register(@RequestBody RegisterRequest request) {
         try {
-            if(request.getPassword()==null) {
+            if(request.getPassword() == null || request.getUsername() == null) {
                 return R.fail("密码不能为空");
             }
             String token = registerService.register(request.getUsername(), request.getPassword(),request.getRole());
